@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSiteUrl, requireEnv } from "@/lib/env";
 import { createServerSupabaseClient, createServiceSupabaseClient } from "@/lib/supabase/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 
 export async function GET() {
   try {
@@ -12,6 +12,7 @@ export async function GET() {
 
     if (!user) return NextResponse.redirect(`${getSiteUrl()}/login`);
 
+    const stripe = getStripe();
     const supabase = createServiceSupabaseClient();
     const { data: existing } = await supabase
       .from("subscriptions")

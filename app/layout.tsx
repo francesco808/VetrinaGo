@@ -1,13 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import { PwaRegister } from "./PwaRegister";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter"
-});
 
 export const metadata: Metadata = {
   title: "VetrinaGo",
@@ -49,7 +42,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it">
-      <body className={`${inter.variable} min-h-screen antialiased`}>
+      <body className="min-h-screen antialiased">
         <PwaRegister />
         {children}
       </body>

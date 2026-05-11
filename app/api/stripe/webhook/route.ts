@@ -2,11 +2,12 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { requireEnv } from "@/lib/env";
 import { createServiceSupabaseClient } from "@/lib/supabase/server";
-import { stripe } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const stripe = getStripe();
   const body = await request.text();
   const signature = request.headers.get("stripe-signature");
 
