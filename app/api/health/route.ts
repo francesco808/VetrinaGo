@@ -26,9 +26,9 @@ export async function GET() {
       supabase.from("subscriptions").select("id", { count: "exact", head: true })
     ]);
 
-    checks.profilesTable = profiles.error ? profiles.error.message : "ok";
-    checks.usageEventsTable = usageEvents.error ? usageEvents.error.message : "ok";
-    checks.subscriptionsTable = subscriptions.error ? subscriptions.error.message : "ok";
+    checks.profilesTable = profiles.error ? formatSupabaseError(profiles.error) : "ok";
+    checks.usageEventsTable = usageEvents.error ? formatSupabaseError(usageEvents.error) : "ok";
+    checks.subscriptionsTable = subscriptions.error ? formatSupabaseError(subscriptions.error) : "ok";
 
     return NextResponse.json({
       ok: !profiles.error && !usageEvents.error && !subscriptions.error,
@@ -41,4 +41,22 @@ export async function GET() {
       error: error instanceof Error ? error.message : "Unknown error"
     });
   }
+}
+
+function formatSupabaseError(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return String(error);
+  }
+
+  const record = error as Record<string, unknown>;
+
+  return {
+    message: record.message ?? "",
+    code: record.code ?? "",
+    details: record.details ?? "",
+    hint: record.hint ?? "",
+    name: record.name ?? "",
+    status: record.status ?? "",
+    statusText: record.statusText ?? ""
+  };
 }
