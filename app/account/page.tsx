@@ -21,8 +21,15 @@ export default async function AccountPage() {
 
   if (!user) redirect("/login");
 
-  await ensureProfile(user.id, user.email ?? null);
-  const usage = await getUsageSummary(user.id);
+  let usage;
+
+  try {
+    await ensureProfile(user.id, user.email ?? null);
+    usage = await getUsageSummary(user.id);
+  } catch (error) {
+    console.error("Account setup error", error);
+    return <SetupNotice title="Database non ancora pronto" />;
+  }
 
   return (
     <>

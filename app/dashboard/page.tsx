@@ -20,8 +20,15 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/login");
 
-  await ensureProfile(user.id, user.email ?? null);
-  const usage = await getUsageSummary(user.id);
+  let usage;
+
+  try {
+    await ensureProfile(user.id, user.email ?? null);
+    usage = await getUsageSummary(user.id);
+  } catch (error) {
+    console.error("Dashboard setup error", error);
+    return <SetupNotice title="Database non ancora pronto" />;
+  }
 
   return (
     <>
